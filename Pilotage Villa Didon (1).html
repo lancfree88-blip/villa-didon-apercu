@@ -1,0 +1,415 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Pilotage Villa Didon</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+  /* Layout: sticky ribbon header, KPI hero row, then a responsive grid of panels (charts + lists). Ink & brass identity. */
+  :root{
+    --bg:#E9EBEF; --surface:#FFFFFF; --surface-2:#F4F6F8; --surface-3:#EDEFF3;
+    --ink:#171A20; --muted:#5C636E; --faint:#8A919C; --line:#E0E3E9; --line-2:#D4D8DF;
+    --brass:#8A6B2C; --brass-fill:#C3A24E; --sea:#0E5A62; --sea-fill:#2C8089;
+    --good:#2E7D57; --good-bg:#E4F1EA; --warn:#9C6B16; --warn-bg:#F6EBD7; --bad:#AE3A37; --bad-bg:#F6E3E2;
+    --shadow:0 1px 2px rgba(20,24,32,.04),0 8px 24px -14px rgba(20,24,32,.18);
+    --radius:14px;
+    --font-display:'Fraunces',Georgia,'Times New Roman',serif;
+    --font-ui:'Hanken Grotesk',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#0C0F14; --surface:#141922; --surface-2:#1A202B; --surface-3:#202834;
+    --ink:#EAEDF2; --muted:#9AA2AE; --faint:#6C7482; --line:#242C38; --line-2:#2E3744;
+    --brass:#D7B463; --brass-fill:#C3A24E; --sea:#4FB0BA; --sea-fill:#2C8089;
+    --good:#54B98A; --good-bg:#15271F; --warn:#D7A23C; --warn-bg:#2A2215; --bad:#E0756E; --bad-bg:#2C1A19;
+    --line-2:#323B49;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -16px rgba(0,0,0,.6);
+    color-scheme:dark;
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0C0F14; --surface:#141922; --surface-2:#1A202B; --surface-3:#202834;
+    --ink:#EAEDF2; --muted:#9AA2AE; --faint:#6C7482; --line:#242C38; --line-2:#323B49;
+    --brass:#D7B463; --brass-fill:#C3A24E; --sea:#4FB0BA; --sea-fill:#2C8089;
+    --good:#54B98A; --good-bg:#15271F; --warn:#D7A23C; --warn-bg:#2A2215; --bad:#E0756E; --bad-bg:#2C1A19;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -16px rgba(0,0,0,.6);
+    color-scheme:dark;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-ui);
+    font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+  .wrap{max-width:1240px;margin:0 auto;
+    padding-left:max(18px,env(safe-area-inset-left,0px));
+    padding-right:max(18px,env(safe-area-inset-right,0px))}
+  h1,h2,h3{margin:0;text-wrap:balance}
+
+  /* ---------- Header ---------- */
+  header.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);
+    border-bottom:1px solid var(--line)}
+  .bar-in{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding-block:14px}
+  .brand{display:flex;flex-direction:column;line-height:1.08}
+  .brand .name{font-family:var(--font-display);font-weight:600;font-size:22px;letter-spacing:.14em;
+    font-variation-settings:"opsz" 40}
+  .brand .sub{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--faint);margin-top:3px}
+  .brand .name b{color:var(--brass);font-weight:600}
+  .bar-spacer{flex:1 1 40px}
+  .ctx{display:flex;flex-direction:column;align-items:flex-end;gap:2px;text-align:right;min-width:0}
+  .ctx .t{font-size:12.5px;color:var(--muted)}
+  .ctx .d{font-family:var(--font-display);font-size:15px;font-weight:500;font-variation-settings:"opsz" 20}
+  .seg{display:inline-flex;background:var(--surface-3);border:1px solid var(--line);border-radius:999px;padding:3px}
+  .seg button{appearance:none;border:0;background:transparent;color:var(--muted);font:inherit;font-size:13px;
+    font-weight:500;padding:6px 15px;border-radius:999px;cursor:pointer;transition:color .15s}
+  .seg button[a-sel]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+  .seg button:focus-visible{outline:2px solid var(--sea);outline-offset:2px}
+  .theme-btn{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);
+    width:38px;height:38px;border-radius:10px;cursor:pointer;display:grid;place-items:center;flex:0 0 auto}
+  .theme-btn:hover{color:var(--ink);border-color:var(--line-2)}
+  .theme-btn:focus-visible{outline:2px solid var(--sea);outline-offset:2px}
+
+  main{padding-top:22px;padding-bottom:40px}
+  .eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);font-weight:600}
+
+  /* ---------- KPI row ---------- */
+  .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:4px}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 16px 12px;
+    box-shadow:var(--shadow);display:flex;flex-direction:column;gap:9px;min-width:0}
+  .kpi .lab{font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .kpi .val{font-family:var(--font-display);font-weight:500;font-size:27px;line-height:1;
+    font-variation-settings:"opsz" 30;letter-spacing:-.01em;transition:opacity .18s}
+  .kpi .val u{font-size:14px;font-family:var(--font-ui);color:var(--muted);text-decoration:none;font-weight:500;margin-left:2px}
+  .kpi .foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto}
+  .delta{display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:600;padding:3px 7px;border-radius:999px;white-space:nowrap}
+  .delta.good{color:var(--good);background:var(--good-bg)} .delta.bad{color:var(--bad);background:var(--bad-bg)}
+  .delta.flat{color:var(--muted);background:var(--surface-3)}
+  .kpi svg.spark{width:60px;height:26px;flex:0 0 auto;overflow:visible}
+
+  /* ---------- Grid ---------- */
+  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin-top:16px}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:18px;min-width:0;display:flex;flex-direction:column}
+  .col-8{grid-column:span 8} .col-7{grid-column:span 7} .col-5{grid-column:span 5}
+  .col-6{grid-column:span 6} .col-4{grid-column:span 4}
+  .p-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+  .p-head h2{font-family:var(--font-display);font-size:17px;font-weight:600;font-variation-settings:"opsz" 24}
+  .p-head .hint{font-size:12px;color:var(--faint)}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:9px;height:9px;border-radius:3px;display:inline-block}
+
+  /* charts */
+  .area-wrap{width:100%} svg.area{width:100%;height:188px;display:block;overflow:visible}
+  .axis{font-size:10.5px;fill:var(--faint);font-family:var(--font-ui)}
+  .gl{stroke:var(--line);stroke-width:1}
+
+  /* activity bars */
+  .bars{display:flex;flex-direction:column;gap:13px;margin-top:2px}
+  .brow{display:grid;grid-template-columns:116px 1fr auto;align-items:center;gap:12px}
+  .brow .nm{font-size:13px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .track{display:block;height:10px;background:var(--surface-3);border-radius:999px;overflow:hidden}
+  .fill{display:block;height:100%;border-radius:999px;min-width:3px}
+  .brow .amt{font-size:13px;font-weight:600;white-space:nowrap}
+  .brow .amt small{color:var(--faint);font-weight:500;margin-left:5px}
+
+  /* resto cards */
+  .mini{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .mcard{background:var(--surface-2);border:1px solid var(--line);border-radius:11px;padding:13px}
+  .mcard .mt{font-size:12px;color:var(--muted);font-weight:600}
+  .mcard .mv{font-family:var(--font-display);font-size:21px;font-weight:500;margin-top:5px;font-variation-settings:"opsz" 24}
+  .mcard .mx{font-size:11.5px;color:var(--faint);margin-top:4px}
+
+  /* cost gauge rows */
+  .cost{display:flex;flex-direction:column;gap:16px}
+  .cost .cr .cl{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;margin-bottom:7px}
+  .cost .cr .cl b{font-weight:600}
+  .cost .cr .cl .e{font-size:12px;font-weight:600;padding:2px 7px;border-radius:999px}
+  .ctrack{position:relative;height:12px;background:var(--surface-3);border-radius:999px}
+  .ctheo{position:absolute;top:0;left:0;height:100%;border-radius:999px;background:var(--sea-fill);opacity:.35}
+  .creal{position:absolute;top:0;left:0;height:100%;border-radius:999px}
+  .ctarget{position:absolute;top:-3px;width:2px;height:18px;background:var(--ink);opacity:.55}
+  .cleg{font-size:11px;color:var(--faint);margin-top:8px;display:flex;gap:14px;flex-wrap:wrap}
+
+  /* alerts */
+  .alerts{display:flex;flex-direction:column;gap:10px}
+  .alert{display:flex;gap:11px;align-items:flex-start;padding:11px 12px;border-radius:11px;background:var(--surface-2);
+    border:1px solid var(--line);border-left-width:3px}
+  .alert.bad{border-left-color:var(--bad)} .alert.warn{border-left-color:var(--warn)}
+  .alert.info{border-left-color:var(--sea-fill)} .alert.good{border-left-color:var(--good)}
+  .alert .ic{flex:0 0 auto;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;margin-top:1px;color:#fff}
+  .alert.bad .ic{background:var(--bad)} .alert.warn .ic{background:var(--warn)}
+  .alert.info .ic{background:var(--sea-fill)} .alert.good .ic{background:var(--good)}
+  .alert .atx{min-width:0} .alert .atx b{font-weight:600;font-size:13.5px}
+  .alert .atx .am{font-size:12px;color:var(--muted);margin-top:2px}
+
+  /* data health */
+  .health{display:flex;flex-direction:column;gap:9px}
+  .hrow{display:flex;align-items:center;gap:11px;font-size:13.5px;padding:9px 11px;background:var(--surface-2);border:1px solid var(--line);border-radius:10px}
+  .hrow .hs{width:9px;height:9px;border-radius:50%;background:var(--good);flex:0 0 auto;box-shadow:0 0 0 3px var(--good-bg)}
+  .hrow .hn{font-weight:600} .hrow .ht{margin-left:auto;color:var(--faint);font-size:12px;font-variant-numeric:tabular-nums}
+  .hnote{font-size:12px;color:var(--muted);margin-top:4px;display:flex;align-items:center;gap:7px}
+  .hnote .ok{color:var(--good);font-weight:600}
+
+  footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--faint)}
+  footer .mk{color:var(--brass);font-family:var(--font-display);font-weight:600;letter-spacing:.02em}
+
+  /* responsive */
+  @media (max-width:1040px){
+    .kpis{grid-template-columns:repeat(3,1fr)}
+    .col-8,.col-7,.col-6,.col-5,.col-4{grid-column:span 12}
+    .grid{grid-template-columns:repeat(12,1fr)}
+  }
+  @media (max-width:560px){
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    .mini{grid-template-columns:1fr}
+    .ctx{align-items:flex-start;text-align:left}
+    .bar-in{gap:14px}
+    .brow{grid-template-columns:96px 1fr auto}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="bar">
+  <div class="wrap bar-in">
+    <div class="brand">
+      <span class="name">VILLA<b>·</b>DIDON</span>
+      <span class="sub">Carthage · Tunis</span>
+    </div>
+    <div class="bar-spacer"></div>
+    <div class="seg" role="group" aria-label="Source">
+      <button a-sel>Données réelles · Fidelio</button>
+    </div>
+    <div class="ctx">
+      <span class="t">Tableau de bord — Direction</span>
+      <span class="d" id="period-label">Novembre – décembre 2026</span>
+    </div>
+    <button class="theme-btn" id="theme" aria-label="Basculer le thème" title="Thème clair / sombre">◐</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="eyebrow" style="margin-bottom:10px">Synthèse · <span id="eyebrow-period">30 derniers jours d'activité</span></div>
+
+  <section class="kpis" id="kpis" aria-label="Indicateurs clés"></section>
+
+  <div class="panel" style="margin-top:14px;padding:13px 18px;display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap;border-left:3px solid var(--sea-fill);font-size:13.5px">
+    <span style="display:inline-flex;align-items:center;gap:7px;padding:4px 11px;border-radius:999px;background:var(--sea-fill);color:#fff;font-weight:600;font-size:12px">◷ Réservations à venir · prévisionnel</span>
+    <span><b>90 nuitées</b> déjà confirmées sur nov.–déc.</span>
+    <span style="color:var(--line-2)">|</span>
+    <span>pic <b>2–5 déc. à 100 %</b></span>
+    <span style="color:var(--line-2)">|</span>
+    <span>ADR réservé <b>~726 TND</b></span>
+    <span style="color:var(--faint);margin-left:auto">sur les livres — hors réalisé</span>
+  </div>
+
+  <div class="grid">
+
+    <section class="panel col-8">
+      <div class="p-head">
+        <h2>Chiffre d'affaires — 12 mois</h2>
+        <span class="hint">logement + restauration · TTC (k TND) · oct. en cours</span>
+      </div>
+      <div class="area-wrap"><svg class="area" id="revchart" viewBox="0 0 720 200" preserveAspectRatio="none" role="img" aria-label="Chiffre d'affaires mensuel sur 12 mois"></svg></div>
+    </section>
+
+    <section class="panel col-4">
+      <div class="p-head"><h2>CA par activité</h2><span class="hint">TTC · 30 jours</span></div>
+      <div class="bars" id="activity"></div>
+    </section>
+
+    <section class="panel col-7">
+      <div class="p-head"><h2>Restauration &amp; bar</h2><span class="hint">30 derniers jours</span></div>
+      <div class="mini">
+        <div class="mcard"><div class="mt">Restaurant</div><div class="mv">492 900<span style="font-size:12px;color:var(--faint)"> TND</span></div><div class="mx">3 677 couverts · ticket 134 TND</div></div>
+        <div class="mcard"><div class="mt">Bar</div><div class="mv">383 800<span style="font-size:12px;color:var(--faint)"> TND</span></div><div class="mx">4 721 couverts · ticket 81 TND</div></div>
+        <div class="mcard"><div class="mt">Hébergement</div><div class="mv">124 200<span style="font-size:12px;color:var(--faint)"> TND</span></div><div class="mx">ADR 726 TND · occ. 28 %</div></div>
+      </div>
+      <div class="p-head" style="margin:18px 0 10px"><h3 style="font-family:var(--font-display);font-size:14px;font-weight:600;color:var(--muted)">Points de vente · 30 jours</h3></div>
+      <div class="bars" id="menu"></div>
+    </section>
+
+    <section class="panel col-5">
+      <div class="p-head"><h2>Coût matière</h2><span class="hint">food &amp; beverage cost</span></div>
+      <div class="cost">
+        <div style="padding:18px 2px;color:var(--muted);font-size:13.5px;line-height:1.6">
+          <div style="display:inline-flex;align-items:center;gap:8px;padding:5px 11px;border-radius:999px;background:var(--sea-fill);color:var(--sea);font-weight:600;font-size:12px;margin-bottom:12px">◷ Prochaine étape</div>
+          <p style="margin:0 0 10px">Le coût matière théorique vs réel (food cost cuisine, beverage cost bar) se calcule en croisant les <b>consommations OPTIMA</b> (stock, fiches techniques) avec les <b>ventes Micros</b>.</p>
+          <p style="margin:0;color:var(--faint)">Disponible dès le raccordement des vues OPTIMA et Micros. Le CA restauration/bar ci-contre est déjà réel (source Fidelio).</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel col-7">
+      <div class="p-head"><h2>Mix clientèle</h2><span class="hint">réservations · cumul</span></div>
+      <div class="bars" id="segments"></div>
+      <div class="hnote" style="margin-top:14px"><span class="ok">Clientèle individuelle majoritaire</span> — principaux comptes : Booking, Expedia, Microsoft, Groupe Mabrouk, Cofisac, Swicorp</div>
+    </section>
+
+    <section class="panel col-5">
+      <div class="p-head"><h2>Grand livre clients</h2><span class="hint">débiteurs · cumul</span></div>
+      <div class="mini" style="grid-template-columns:repeat(2,1fr)">
+        <div class="mcard"><div class="mt">Facturé</div><div class="mv">73,5<span style="font-size:12px;color:var(--faint)"> M</span></div><div class="mx">47 309 factures</div></div>
+        <div class="mcard"><div class="mt">Encaissé</div><div class="mv">24,9<span style="font-size:12px;color:var(--faint)"> M</span></div><div class="mx">solde 48,6 M TND</div></div>
+      </div>
+      <div class="cost" style="margin-top:14px">
+        <div class="cr">
+          <div class="cl"><span>Taux de recouvrement</span><span><b>33,8 %</b></span></div>
+          <div class="ctrack"><div class="creal" style="width:33.8%;background:var(--warn)"></div><div class="ctarget" style="left:80%"></div></div>
+        </div>
+        <div class="cleg"><span>Solde débiteurs <b style="color:var(--ink)">48,6 M TND</b> à cadrer avec la comptabilité</span></div>
+      </div>
+    </section>
+
+    <section class="panel col-7">
+      <div class="p-head"><h2>Contrôle des recettes</h2><span class="hint">source Fidelio · 30 jours</span></div>
+      <div class="alerts">
+        <div class="alert good"><span class="ic">✓</span><div class="atx"><b>Encaissements rapprochés : 1 004 900 TND</b><div class="am">Carte 463 600 · Espèces 424 200 · City Ledger 115 800 · Divers 1 400</div></div></div>
+        <div class="alert info"><span class="ic">i</span><div class="atx"><b>City Ledger (débiteurs) : 115 800 TND</b><div class="am">11,5 % du CA à l'échéance — suivi des comptes débiteurs</div></div></div>
+        <div class="alert warn"><span class="ic">!</span><div class="atx"><b>Débours / sorties de caisse : −8 071 TND</b><div class="am">Poste « Debours » — à ventiler et justifier par le contrôle interne</div></div></div>
+        <div class="alert info"><span class="ic">i</span><div class="atx"><b>Offerts, remises et annulations</b><div class="am">Détail par motif et par serveur disponible au raccordement de Micros</div></div></div>
+      </div>
+    </section>
+
+    <section class="panel col-5">
+      <div class="p-head"><h2>Santé des données</h2><span class="hint">sources raccordées</span></div>
+      <div class="health">
+        <div class="hrow"><span class="hs"></span><span class="hn">Fidelio</span><span>Hébergement · F&amp;B · recettes</span><span class="ht" style="color:var(--good)">connecté</span></div>
+        <div class="hrow"><span class="hs" style="background:var(--faint)"></span><span class="hn">Micros</span><span>Caisses · détail ventes</span><span class="ht" style="color:var(--faint)">à venir</span></div>
+        <div class="hrow"><span class="hs" style="background:var(--faint)"></span><span class="hn">OPTIMA</span><span>Stock · Compta · Paie</span><span class="ht" style="color:var(--faint)">à venir</span></div>
+      </div>
+      <div class="hnote"><span class="ok">✓ Fidelio en lecture seule</span> — 7 vues OSBC, aucune écriture sur le système source</div>
+    </section>
+
+  </div>
+
+  <footer>
+    <span>Données réelles Fidelio (vues OSBC) · réalisé au 27 oct. 2026 · réservations nov.–déc. en prévisionnel · lecture seule.</span>
+    <span class="mk">Hannibal Advanced Solutions</span>
+  </footer>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var fmt=function(n){return n.toLocaleString('fr-FR')};
+
+  // ----- KPI datasets per period -----
+  var DATA={
+    mois:{label:"30 derniers jours · réalisé",eye:"28 sep – 27 oct 2026 (réalisé)",kpis:[
+      {lab:"Taux d'occupation",val:"74",u:"%",d:"30 jours réalisés",t:"note",s:[70,80,90,100,90,80,90,70,80,74]},
+      {lab:"Prix moyen (ADR)",val:"543",u:"TND",d:"30 jours réalisés",t:"note",s:[460,541,740,608,418,496,485,544,526,543]},
+      {lab:"RevPAR",val:"393",u:"TND",d:"occ. × ADR",t:"note",s:[322,487,592,304,347,436,490,526,406,393]},
+      {lab:"CA total",val:"1 029 500",u:"TND",d:"30 jours · TTC",t:"note",s:[1066,1025,1029,1300,1242,1030]},
+      {lab:"CA restauration & bar",val:"876 700",u:"TND",d:"85 % du CA",t:"good",s:[383,492,383,492,450,460]},
+      {lab:"Couverts servis",val:"8 398",u:"",d:"resto + bar",t:"note",s:[8,8,8,8,8,8]}
+    ]}
+  };
+
+  function spark(data,tone){
+    var w=60,h=26,min=Math.min.apply(null,data),max=Math.max.apply(null,data),rng=(max-min)||1;
+    var col=tone==='bad'?'var(--bad)':tone==='flat'?'var(--faint)':'var(--good)';
+    var pts=data.map(function(v,i){var x=(i/(data.length-1))*w;var y=h-2-((v-min)/rng)*(h-5);return [x,y]});
+    var line=pts.map(function(p,i){return (i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)}).join(' ');
+    var area=line+' L'+w+' '+h+' L0 '+h+' Z';
+    var last=pts[pts.length-1];
+    var id='g'+Math.random().toString(36).slice(2,8);
+    return '<svg class="spark" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" aria-hidden="true">'+
+      '<defs><linearGradient id="'+id+'" x1="0" y1="0" x2="0" y2="1">'+
+      '<stop offset="0" stop-color="'+col+'" stop-opacity="0.22"/><stop offset="1" stop-color="'+col+'" stop-opacity="0"/>'+
+      '</linearGradient></defs>'+
+      '<path d="'+area+'" fill="url(#'+id+')"/>'+
+      '<path d="'+line+'" fill="none" stroke="'+col+'" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>'+
+      '<circle cx="'+last[0].toFixed(1)+'" cy="'+last[1].toFixed(1)+'" r="2.2" fill="'+col+'"/></svg>';
+  }
+
+  function renderKpis(p){
+    var set=DATA[p].kpis, box=document.getElementById('kpis'), html='';
+    set.forEach(function(k){
+      var cls=k.t==='bad'?'bad':(k.t==='flat'||k.t==='note')?'flat':'good';
+      var arrow=k.t==='note'?'':(k.t==='bad'?'▲ ':(k.t==='flat'?'■ ':'▲ '));
+      var sparkTone=k.t==='note'?'good':k.t;
+      html+='<div class="kpi"><span class="lab">'+k.lab+'</span>'+
+        '<div class="val">'+k.val+'<u>'+k.u+'</u></div>'+
+        '<div class="foot"><span class="delta '+cls+'">'+arrow+k.d+'</span>'+spark(k.s,sparkTone)+'</div></div>';
+    });
+    box.innerHTML=html;
+    document.getElementById('period-label').textContent=DATA[p].label;
+    document.getElementById('eyebrow-period').textContent=DATA[p].eye;
+  }
+
+  // ----- RevPAR area chart -----
+  function revChart(){
+    var svg=document.getElementById('revchart');
+    var data=[1005,998,977,1070,537,652,1134,1066,1025,1029,1300,1242,863];
+    var W=720,H=200,padT=14,padB=26,padX=6;
+    var min=0,max=1400,rng=max-min;
+    var X=function(i){return padX+(i/(data.length-1))*(W-2*padX)};
+    var Y=function(v){return padT+(1-(v-min)/rng)*(H-padT-padB)};
+    var g='';
+    [0,400,800,1200].forEach(function(v){var y=Y(v).toFixed(1);
+      g+='<line class="gl" x1="0" y1="'+y+'" x2="'+W+'" y2="'+y+'"/>'+
+         '<text class="axis" x="2" y="'+(y-4)+'">'+v+'</text>';});
+    var line=data.map(function(v,i){return (i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)}).join(' ');
+    var area=line+' L'+X(data.length-1).toFixed(1)+' '+(H-padB)+' L'+X(0).toFixed(1)+' '+(H-padB)+' Z';
+    var labs='';var days=['oct','nov','déc','jan','fév','mar','avr','mai','jun','jul','aoû','sep','oct'];
+    days.forEach(function(d,i){if(i%2===0)labs+='<text class="axis" text-anchor="middle" x="'+X(i).toFixed(1)+'" y="'+(H-8)+'">'+d+'</text>';});
+    var lx=X(data.length-1).toFixed(1),ly=Y(data[data.length-1]).toFixed(1);
+    svg.innerHTML='<defs><linearGradient id="areaG" x1="0" y1="0" x2="0" y2="1">'+
+      '<stop offset="0" stop-color="var(--sea-fill)" stop-opacity="0.26"/>'+
+      '<stop offset="1" stop-color="var(--sea-fill)" stop-opacity="0.02"/></linearGradient></defs>'+
+      g+'<path d="'+area+'" fill="url(#areaG)"/>'+
+      '<path d="'+line+'" fill="none" stroke="var(--sea)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>'+
+      '<circle cx="'+lx+'" cy="'+ly+'" r="4" fill="var(--sea)"/>'+
+      '<circle cx="'+lx+'" cy="'+ly+'" r="8" fill="var(--sea)" opacity="0.16"/>'+labs;
+  }
+
+  // ----- Activity bars -----
+  function activity(){
+    var rows=[['Restaurant',492903,'var(--brass)'],['Bar',383775,'var(--brass)'],
+      ['Hébergement',124239,'var(--sea)'],['Divers',28603,'var(--brass)']];
+    var tot=rows.reduce(function(a,r){return a+r[1]},0),max=rows[0][1];
+    document.getElementById('activity').innerHTML=rows.map(function(r){
+      var pct=Math.round(r[1]/tot*100);
+      return '<div class="brow"><span class="nm">'+r[0]+'</span>'+
+        '<span class="track"><span class="fill" style="width:'+(r[1]/max*100).toFixed(1)+'%;background:'+r[2]+'"></span></span>'+
+        '<span class="amt">'+fmt(r[1])+'<small>'+pct+'%</small></span></div>';
+    }).join('');
+  }
+
+  // ----- Points de vente (restauration.csv, Micros) -----
+  function menu(){
+    var rows=[['Le Resto',415692,'var(--brass)'],['Bar Light',194151,'var(--brass)'],
+      ['Le Perchoir',191564,'var(--brass)'],['Chicha',32322,'var(--brass)'],['Autres (Sushi, cocktail, R.S.)',39445,'var(--faint)']];
+    var tot=rows.reduce(function(a,r){return a+r[1]},0),max=rows[0][1];
+    document.getElementById('menu').innerHTML=rows.map(function(r){
+      var pct=Math.round(r[1]/tot*100);
+      return '<div class="brow"><span class="nm" title="'+r[0]+'">'+r[0]+'</span>'+
+        '<span class="track"><span class="fill" style="width:'+(r[1]/max*100).toFixed(0)+'%;background:'+r[2]+'"></span></span>'+
+        '<span class="amt">'+fmt(r[1])+'<small>'+pct+'%</small></span></div>';
+    }).join('');
+  }
+
+  // ----- Mix clientèle (resa_segment.csv — cumul) -----
+  function segments(){
+    var rows=[['Individuel',10468084,'var(--sea)'],['Rack (tarif public)',2475178,'var(--brass)'],
+      ['Entreprises & OTA',1549738,'var(--brass)']];
+    var tot=rows.reduce(function(a,r){return a+r[1]},0),max=rows[0][1];
+    document.getElementById('segments').innerHTML=rows.map(function(r){
+      var pct=Math.round(r[1]/tot*100);
+      return '<div class="brow"><span class="nm" title="'+r[0]+'">'+r[0]+'</span>'+
+        '<span class="track"><span class="fill" style="width:'+(r[1]/max*100).toFixed(0)+'%;background:'+r[2]+'"></span></span>'+
+        '<span class="amt">'+pct+'<small>%</small></span></div>';
+    }).join('');
+  }
+
+  // ----- Theme toggle -----
+  var root=document.documentElement;
+  (function(){try{var s=localStorage.getItem('vd-theme');if(s)root.setAttribute('data-theme',s)}catch(e){}})();
+  document.getElementById('theme').addEventListener('click',function(){
+    var cur=root.getAttribute('data-theme');
+    var dark=cur?cur==='dark':window.matchMedia('(prefers-color-scheme:dark)').matches;
+    var nx=dark?'light':'dark';root.setAttribute('data-theme',nx);
+    try{localStorage.setItem('vd-theme',nx)}catch(e){}
+  });
+
+  renderKpis('mois');revChart();activity();menu();segments();
+})();
+</script>
+
+</body></html>
